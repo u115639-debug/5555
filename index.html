@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NOVA TECH｜次世代數位創新與企業解決方案</title>
+    <title>個人學術與作品集｜Research & Portfolio</title>
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
+            --primary: #1e40af;
+            --primary-light: #eff6ff;
+            --accent: #0284c7;
             --dark: #0f172a;
-            --slate: #334155;
-            --light-bg: #f8fafc;
+            --text: #334155;
+            --muted: #64748b;
+            --bg: #f8fafc;
             --white: #ffffff;
             --border: #e2e8f0;
         }
@@ -19,509 +21,181 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
             scroll-behavior: smooth;
         }
 
         body {
-            color: var(--slate);
-            background-color: var(--white);
-            line-height: 1.6;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
         }
 
-        /* 導覽列 */
+        /* 頂部導覽列 */
         header {
-            position: fixed;
+            position: sticky;
             top: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
             border-bottom: 1px solid var(--border);
-            z-index: 1000;
+            z-index: 100;
         }
 
-        .nav-container {
-            max-width: 1200px;
+        .nav-inner {
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 1rem 2rem;
+            padding: 1rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .logo {
-            font-size: 1.5rem;
+        .site-title {
             font-weight: 800;
+            font-size: 1.2rem;
             color: var(--dark);
             text-decoration: none;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            letter-spacing: 0.5px;
         }
 
-        .logo span {
-            color: var(--primary);
-        }
-
-        .nav-links {
+        .nav-menu {
             display: flex;
-            gap: 2rem;
+            gap: 1.75rem;
             list-style: none;
         }
 
-        .nav-links a {
+        .nav-menu a {
             text-decoration: none;
-            color: var(--slate);
+            color: var(--text);
             font-weight: 500;
+            font-size: 0.95rem;
             transition: color 0.2s;
         }
 
-        .nav-links a:hover {
+        .nav-menu a:hover {
             color: var(--primary);
         }
 
-        .btn-nav {
-            background: var(--primary);
-            color: var(--white) !important;
-            padding: 0.5rem 1.25rem;
-            border-radius: 6px;
-            transition: background 0.2s !important;
+        /* 個人簡介區 (Hero) */
+        .profile-section {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            padding: 4.5rem 1.5rem;
         }
 
-        .btn-nav:hover {
-            background: var(--primary-dark);
-        }
-
-        /* 主視覺區 (Hero) */
-        .hero {
-            padding: 9rem 2rem 6rem;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: var(--white);
-            text-align: center;
-        }
-
-        .hero-content {
-            max-width: 800px;
+        .profile-container {
+            max-width: 1000px;
             margin: 0 auto;
-        }
-
-        .badge {
-            display: inline-block;
-            background: rgba(37, 99, 235, 0.2);
-            color: #60a5fa;
-            border: 1px solid rgba(96, 165, 250, 0.3);
-            padding: 0.35rem 1rem;
-            border-radius: 50px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            font-weight: 800;
-            line-height: 1.2;
-            margin-bottom: 1.5rem;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            color: #cbd5e1;
-            margin-bottom: 2.5rem;
-        }
-
-        .hero-buttons {
             display: flex;
+            align-items: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .avatar-box {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: var(--white);
+            display: flex;
+            align-items: center;
             justify-content: center;
+            font-size: 2.8rem;
+            font-weight: 800;
+            flex-shrink: 0;
+            box-shadow: 0 10px 25px rgba(30, 64, 175, 0.2);
+        }
+
+        .profile-info {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .profile-info h1 {
+            font-size: 2.2rem;
+            color: var(--dark);
+            margin-bottom: 0.4rem;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .bio {
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            max-width: 680px;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tag {
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 0.3rem 0.85rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .action-links {
+            display: flex;
             gap: 1rem;
             flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.6rem 1.35rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.2s;
         }
 
         .btn-primary {
             background: var(--primary);
             color: var(--white);
-            padding: 0.875rem 2rem;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.2s;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
         }
 
         .btn-primary:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
+            background: #1e3a8a;
         }
 
         .btn-outline {
-            background: transparent;
-            color: var(--white);
-            padding: 0.875rem 2rem;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            border: 1px solid #475569;
-            transition: all 0.2s;
+            border: 1px solid var(--border);
+            color: var(--dark);
+            background: var(--white);
         }
 
         .btn-outline:hover {
-            border-color: var(--white);
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        /* 數據亮點 */
-        .stats {
-            background: var(--white);
-            border-bottom: 1px solid var(--border);
-            padding: 3rem 2rem;
-        }
-
-        .stats-grid {
-            max-width: 1100px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            text-align: center;
-        }
-
-        .stat-item h3 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--primary);
-        }
-
-        .stat-item p {
-            color: var(--slate);
-            font-weight: 500;
-            margin-top: 0.25rem;
-        }
-
-        /* 通用區塊排版 */
-        section {
-            padding: 5.5rem 2rem;
-        }
-
-        .section-header {
-            text-align: center;
-            max-width: 650px;
-            margin: 0 auto 3.5rem;
-        }
-
-        .section-header h2 {
-            font-size: 2.25rem;
-            color: var(--dark);
-            font-weight: 800;
-            margin-bottom: 1rem;
-        }
-
-        .section-header p {
-            color: #64748b;
-            font-size: 1.1rem;
-        }
-
-        /* 核心服務 */
-        .services {
-            background: var(--light-bg);
-        }
-
-        .services-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .card {
-            background: var(--white);
-            padding: 2.5rem 2rem;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            transition: all 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
-            border-color: #bfdbfe;
-        }
-
-        .card-icon {
-            width: 50px;
-            height: 50px;
-            background: #eff6ff;
-            color: var(--primary);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-            font-weight: bold;
-        }
-
-        .card h3 {
-            font-size: 1.35rem;
-            color: var(--dark);
-            margin-bottom: 0.75rem;
-        }
-
-        /* 關於我們 */
-        .about-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .about-visual {
-            background: linear-gradient(135deg, #2563eb, #0f172a);
-            height: 360px;
-            border-radius: 16px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: var(--white);
-            padding: 2rem;
-            text-align: center;
-            box-shadow: 0 20px 25px -5px rgba(37, 99, 235, 0.2);
-        }
-
-        .about-text h2 {
-            font-size: 2.25rem;
-            color: var(--dark);
-            margin-bottom: 1.25rem;
-        }
-
-        .about-text p {
-            margin-bottom: 1.25rem;
-            color: #475569;
-        }
-
-        .feature-list {
-            list-style: none;
-            margin-top: 1.5rem;
-        }
-
-        .feature-list li {
-            margin-bottom: 0.75rem;
-            font-weight: 500;
-            color: var(--dark);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .feature-list li::before {
-            content: "✓";
-            color: var(--primary);
-            font-weight: bold;
-        }
-
-        /* 聯絡我們 */
-        .contact {
-            background: var(--light-bg);
-        }
-
-        .contact-box {
-            max-width: 700px;
-            margin: 0 auto;
-            background: var(--white);
-            padding: 3rem;
-            border-radius: 16px;
-            border: 1px solid var(--border);
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: var(--dark);
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.875rem;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 1rem;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
             border-color: var(--primary);
+            color: var(--primary);
         }
 
-        #form-status {
-            margin-top: 1rem;
-            font-weight: 600;
-            color: #16a34a;
-            display: none;
+        /* 內容主容器 */
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 3.5rem 1.5rem;
         }
 
-        /* 頁尾 */
-        footer {
-            background: var(--dark);
-            color: #94a3b8;
-            padding: 3rem 2rem;
-            text-align: center;
+        .section-block {
+            margin-bottom: 4.5rem;
         }
 
-        footer p {
-            font-size: 0.95rem;
-        }
-
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2.2rem; }
-            .nav-links { display: none; }
-        }
-    </style>
-</head>
-<body>
-
-    <!-- 頂部導覽列 -->
-    <header>
-        <div class="nav-container">
-            <a href="#" class="logo">NOVA<span>TECH</span></a>
-            <ul class="nav-links">
-                <li><a href="#services">核心服務</a></li>
-                <li><a href="#about">關於我們</a></li>
-                <li><a href="#contact" class="btn-nav">立即諮詢</a></li>
-            </ul>
-        </div>
-    </header>
-
-    <!-- 主視覺橫幅 -->
-    <section class="hero">
-        <div class="hero-content">
-            <div class="badge">2026 企業數位轉型首選夥伴</div>
-            <h1>以創新科技驅動您的商業成長</h1>
-            <p>我們提供全方位雲端架構、AI 數據分析與客製化軟體開發服務，協助企業在數位時代建立無可取代的競爭優勢。</p>
-            <div class="hero-buttons">
-                <a href="#contact" class="btn-primary">預約專案顧問</a>
-                <a href="#services" class="btn-outline">探索解決方案</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- 關鍵數據 -->
-    <div class="stats">
-        <div class="stats-grid">
-            <div class="stat-item">
-                <h3>500+</h3>
-                <p>企業客戶信賴</p>
-            </div>
-            <div class="stat-item">
-                <h3>99.9%</h3>
-                <p>系統穩定運行率</p>
-            </div>
-            <div class="stat-item">
-                <h3>24/7</h3>
-                <p>全天候技術支援</p>
-            </div>
-            <div class="stat-item">
-                <h3>10 年</h3>
-                <p>產業深耕經驗</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- 核心服務 -->
-    <section id="services" class="services">
-        <div class="section-header">
-            <h2>我們的專業服務</h2>
-            <p>從策略規劃到系統落地，為不同規模的企業量身打造高效解決方案。</p>
-        </div>
-        <div class="services-grid">
-            <div class="card">
-                <div class="card-icon">01</div>
-                <h3>雲端架構與部署</h3>
-                <p>協助企業無縫遷移至高可用性雲端環境，大幅降低維運成本並提升全球存取速度。</p>
-            </div>
-            <div class="card">
-                <div class="card-icon">02</div>
-                <h3>AI 智能自動化</h3>
-                <p>導入最新生成式 AI 與自動化工作流，減少重複性人力作業，讓團隊專注於高價值決策。</p>
-            </div>
-            <div class="card">
-                <div class="card-icon">03</div>
-                <h3>企業級網站與系統開發</h3>
-                <p>兼具美學設計與資安防護的客製化網站與內部管理平台，全面支援手機與桌面裝置。</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- 關於我們 -->
-    <section id="about">
-        <div class="about-container">
-            <div class="about-visual">
-                <h3 style="font-size: 1.8rem; margin-bottom: 0.5rem;">創新 · 穩定 · 值得信賴</h3>
-                <p style="color: #bfdbfe;">NOVA TECH 技術研發中心</p>
-            </div>
-            <div class="about-text">
-                <h2>為什麼選擇與我們合作？</h2>
-                <p>NOVA TECH 成立於台灣，集結了資深軟體工程師、UI/UX 設計師與系統架構師。我們深信好的技術不該複雜難懂，而應該直接解決企業的營運痛點。</p>
-                <ul class="feature-list">
-                    <li>透明的專案進度追蹤與敏捷開發流程</li>
-                    <li>符合國際標準的資訊安全與資料加密規範</li>
-                    <li>專屬技術團隊一對一售後維護與教育訓練</li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <!-- 聯絡表單 -->
-    <section id="contact" class="contact">
-        <div class="section-header">
-            <h2>開啟您的下一個專案</h2>
-            <p>填寫下方表單，我們的專案顧問將於 24 小時內與您聯繫。</p>
-        </div>
-        <div class="contact-box">
-            <form id="contactForm">
-                <div class="form-group">
-                    <label for="name">您的姓名 / 稱呼</label>
-                    <input type="text" id="name" placeholder="例如：王大明" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">企業電子信箱</label>
-                    <input type="email" id="email" placeholder="name@company.com" required>
-                </div>
-                <div class="form-group">
-                    <label for="message">專案需求簡述</label>
-                    <textarea id="message" rows="4" placeholder="請簡述您想開發的網站類型或系統需求..." required></textarea>
-                </div>
-                <button type="submit" class="btn-primary" style="width: 100%;">送出諮詢表單</button>
-                <p id="form-status">✓ 感謝您的聯繫！我們已收到您的訊息，將盡快安排專人回覆。</p>
-            </form>
-        </div>
-    </section>
-
-    <!-- 頁尾 -->
-    <footer>
-        <p>© 2026 NOVA TECH Co., Ltd. All Rights Reserved.｜台灣雲林縣創新科技園區</p>
-    </footer>
-
-    <script>
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const status = document.getElementById('form-status');
-            status.style.display = 'block';
-            this.reset();
-        });
-    </script>
-</body>
-</html>
+        .section-title {
+            font-size: 1.65rem;
+            color: var(--dark);
+            font-weight: 800;
+            margin-bottom: 0
