@@ -1,138 +1,749 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>個人研究與作品集｜Research & Portfolio</title>
-    <style>
-        :root {
-            --primary: #1e40af;
-            --bg: #f8fafc;
-            --card: #ffffff;
-            --text: #1e293b;
-            --muted: #64748b;
-            --border: #e2e8f0;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif; }
-        body { background: var(--bg); color: var(--text); line-height: 1.6; }
-        header { background: var(--card); border-bottom: 1px solid var(--border); padding: 1rem 1.5rem; position: sticky; top: 0; z-index: 10; }
-        .nav { max-width: 960px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-        .nav a { text-decoration: none; color: var(--text); font-weight: 600; margin-left: 1.5rem; }
-        .nav a:hover { color: var(--primary); }
-        .hero { background: var(--card); border-bottom: 1px solid var(--border); padding: 4rem 1.5rem; }
-        .hero-inner { max-width: 960px; margin: 0 auto; }
-        .hero h1 { font-size: 2.2rem; margin-bottom: 0.5rem; }
-        .hero .role { color: var(--primary); font-weight: 600; font-size: 1.1rem; margin-bottom: 1rem; }
-        .hero p { color: var(--muted); max-width: 650px; margin-bottom: 1.5rem; }
-        .container { max-width: 960px; margin: 0 auto; padding: 3rem 1.5rem; }
-        h2 { font-size: 1.5rem; margin-bottom: 1.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--primary); display: inline-block; }
-        .section { margin-bottom: 4rem; }
-        /* 論文列表 */
-        .paper-item { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; margin-bottom: 1.2rem; }
-        .paper-year { display: inline-block; background: #eff6ff; color: var(--primary); font-weight: 700; font-size: 0.85rem; padding: 0.2rem 0.6rem; border-radius: 4px; margin-bottom: 0.5rem; }
-        .paper-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; }
-        .paper-desc { color: var(--muted); font-size: 0.95rem; margin-bottom: 1rem; }
-        .links a { display: inline-block; text-decoration: none; color: var(--primary); border: 1px solid var(--primary); padding: 0.3rem 0.8rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600; margin-right: 0.5rem; }
-        .links a:hover { background: var(--primary); color: #fff; }
-        /* 作品網格 */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-        .project-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; }
-        .project-card h3 { font-size: 1.15rem; margin-bottom: 0.5rem; }
-        .project-card p { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.2rem; }
-        .tag { display: inline-block; background: #f1f5f9; color: #475569; font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 4px; margin-right: 0.3rem; margin-bottom: 0.8rem; }
-        footer { text-align: center; padding: 2rem; color: var(--muted); border-top: 1px solid var(--border); font-size: 0.9rem; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>思維與研究筆記 | Notes, Papers &amp; Digital Portfolio</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --primary: #1d4ed8;
+      --primary-hover: #1e40af;
+      --danger: #dc2626;
+      --danger-hover: #b91c1c;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 頂部導覽列 */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-container {
+      max-width: 1024px;
+      margin: 0 auto;
+      padding: 1.15rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .brand h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .brand p {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 0.1rem;
+    }
+
+    /* 按鈕樣式 */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      padding: 0.5rem 0.95rem;
+      font-size: 0.88rem;
+      font-weight: 500;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn:hover { background: #f1f5f9; }
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      border-color: var(--primary-hover);
+    }
+    .btn-danger {
+      color: var(--danger);
+      border-color: #fecaca;
+      background: #fef2f2;
+    }
+    .btn-danger:hover {
+      background: var(--danger);
+      color: #ffffff;
+    }
+    .btn-sm { padding: 0.35rem 0.7rem; font-size: 0.82rem; }
+
+    /* 主內容區塊 */
+    main {
+      max-width: 1024px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+      flex: 1;
+    }
+
+    /* ============================================================
+       個人簡介區塊（直接寫在網頁中，載入秒開，隨時可在此修改文字）
+       ============================================================ */
+    .profile-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.65rem 1.85rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .profile-card h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.45rem;
+      color: var(--text);
+    }
+
+    .profile-card p {
+      color: #334155;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+      max-width: 78ch;
+    }
+
+    .contact-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    .contact-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.84rem;
+      color: #334155;
+      background: #f1f5f9;
+      border: 1px solid var(--border);
+      padding: 0.35rem 0.8rem;
+      border-radius: 999px;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+
+    .contact-chip:hover {
+      background: #e2e8f0;
+      color: var(--text);
+    }
+
+    /* 管理員模式橫幅 */
+    .admin-banner {
+      display: none;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1e3a8a;
+      padding: 0.85rem 1.2rem;
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .admin-banner.show { display: flex; }
+
+    /* 分類篩選與搜尋列 */
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+
+    .tab {
+      padding: 0.45rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .tab:hover { color: var(--text); border-color: #cbd5e1; }
+    .tab.active {
+      background: var(--text);
+      color: #ffffff;
+      border-color: var(--text);
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex: 1;
+      max-width: 300px;
+      min-width: 210px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.48rem 0.85rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.88rem;
+      background: var(--surface);
+      color: var(--text);
+    }
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    /* 內容卡片清單 */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.4rem 1.6rem;
+      transition: box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+    .card:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.55rem;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.76rem;
+      font-weight: 600;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+    }
+    .badge-paper { background: #dbeafe; color: #1e40af; }
+    .badge-project { background: #dcfce7; color: #166534; }
+    .badge-video { background: #fae8ff; color: #86198f; }
+    .badge-web { background: #ffedd5; color: #9a3412; }
+
+    .year {
+      font-size: 0.84rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .card h3 {
+      font-size: 1.12rem;
+      font-weight: 700;
+      margin-bottom: 0.45rem;
+    }
+
+    .card p {
+      font-size: 0.93rem;
+      color: #475569;
+      margin-bottom: 1rem;
+      white-space: pre-line;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      padding-top: 0.8rem;
+      border-top: 1px solid #f1f5f9;
+    }
+
+    .read-link {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--primary);
+      text-decoration: none;
+    }
+    .read-link:hover { text-decoration: underline; }
+
+    .admin-actions {
+      display: flex;
+      gap: 0.45rem;
+    }
+
+    /* 狀態提示 */
+    .status-box {
+      text-align: center;
+      padding: 3.5rem 1rem;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+    }
+
+    /* 頁尾 */
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    /* 彈出視窗 Modal */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.5);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .modal-backdrop.open { display: flex; }
+
+    .modal {
+      background: var(--surface);
+      width: 100%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      border-radius: 14px;
+      padding: 1.5rem;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
+    }
+
+    .modal h3 { font-size: 1.15rem; margin-bottom: 1rem; }
+
+    .form-group { margin-bottom: 1rem; }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+      color: #334155;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.6rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-family: inherit;
+    }
+
+    .form-group textarea { min-height: 95px; resize: vertical; }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.6rem;
+      margin-top: 1.25rem;
+    }
+  </style>
 </head>
 <body>
 
-<header>
-    <div class="nav">
-        <strong style="font-size: 1.1rem;">MY PORTFOLIO</strong>
-        <div>
-            <a href="#papers" style="margin-left:0;">研究論文</a>
-            <a href="#projects">開發作品</a>
-            <a href="#contact">聯絡方式</a>
-        </div>
+  <header>
+    <div class="nav-container">
+      <div class="brand">
+        <h1>思維與研究筆記</h1>
+        <p>Notes, Papers &amp; Digital Portfolio</p>
+      </div>
+      <div id="headerControls">
+        <button class="btn" onclick="openLoginModal()">🔒 管理內容</button>
+      </div>
     </div>
-</header>
+  </header>
 
-<section class="hero">
-    <div class="hero-inner">
-        <h1>你的名字（Your Name）</h1>
-        <div class="role">研究生 / 網頁與系統開發者</div>
-        <p>專注於資訊系統開發、數據分析與自動化工具研究。這裡收錄了我近期的學術研究論文與網頁專案作品。</p>
-        <div class="links">
-            <a href="https://github.com/u115639-debug" target="_blank">GitHub 主頁</a>
-            <a href="#papers">瀏覽論文</a>
-        </div>
+  <main>
+    <!-- 個人簡介區塊（日後欲修改個人介紹、信箱或頻道連結，直接改這裡的文字即可） -->
+    <section class="profile-card">
+      <h2>關於我 / About Me</h2>
+      <p>歡迎來到我的思維與研究筆記！這裡收錄了我的學術論文、研究作品、影音創作與網頁開發專案，記錄持續探索與思考的軌跡。</p>
+      <div class="contact-links">
+        <a class="contact-chip" href="mailto:yourname@example.com">✉️ yourname@example.com</a>
+        <a class="contact-chip" href="https://www.youtube.com" target="_blank" rel="noopener noreferrer">🔗 影音頻道 / 個人主頁 ↗</a>
+      </div>
+    </section>
+
+    <!-- 管理員模式提示列 -->
+    <div id="adminBanner" class="admin-banner">
+      <span>🔓 <strong>管理員模式已解鎖</strong>：可直接新增、編輯或刪除各類作品與筆記（自動同步雲端）。</span>
+      <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+        <button class="btn btn-primary btn-sm" onclick="openEditorModal()">＋ 新增作品 / 筆記</button>
+        <button class="btn btn-sm" onclick="logoutAdmin()">登出管理</button>
+      </div>
     </div>
-</section>
 
-<main class="container">
-    <!-- 論文區 -->
-    <section id="papers" class="section">
-        <h2>研究論文與報告 (Publications)</h2>
-        
-        <div class="paper-item">
-            <span class="paper-year">2026</span>
-            <div class="paper-title">基於雲端靜態架構之自動化資訊彙整系統研究</div>
-            <div class="paper-desc">摘要：探討如何利用輕量化前端架構與自動化部署流程，建置高可用性且低維護成本的個人資訊平台。</div>
-            <div class="links">
-                <a href="#" onclick="alert('請在此替換為你的論文 PDF 連結')">閱讀全文 (PDF)</a>
-                <a href="https://github.com/u115639-debug" target="_blank">實驗程式碼</a>
+    <!-- 分類篩選與搜尋工具列 -->
+    <div class="toolbar">
+      <div class="tabs">
+        <button class="tab active" onclick="setFilter('all', this)">全部內容</button>
+        <button class="tab" onclick="setFilter('論文', this)">📄 學術論文</button>
+        <button class="tab" onclick="setFilter('作品', this)">🔬 研究作品</button>
+        <button class="tab" onclick="setFilter('影片', this)">🎬 影音創作</button>
+        <button class="tab" onclick="setFilter('網頁', this)">🌐 網頁專案</button>
+      </div>
+      <div class="search-box">
+        <input type="text" id="searchInput" class="search-input" placeholder="搜尋標題或關鍵字..." oninput="renderItems()" />
+        <button class="btn btn-sm" onclick="loadData()" title="重新同步雲端資料">↻</button>
+      </div>
+    </div>
+
+    <!-- 內容展示區 -->
+    <div id="contentList" class="grid">
+      <div class="status-box">正在從雲端資料庫讀取最新資料...</div>
+    </div>
+  </main>
+
+  <footer>
+    <p>© <span id="currentYear"></span> 思維與研究筆記 · Powered by Google Drive &amp; Render</p>
+  </footer>
+
+  <!-- 密碼驗證視窗 -->
+  <div id="loginModal" class="modal-backdrop">
+    <div class="modal">
+      <h3>🔒 輸入管理員密碼</h3>
+      <p style="font-size:0.88rem; color:var(--muted); margin-bottom:1rem;">
+        請輸入您在 Google Apps Script 後台設定的管理密碼以解鎖編輯功能。
+      </p>
+      <div class="form-group">
+        <label for="adminPwdInput">管理密碼</label>
+        <input type="password" id="adminPwdInput" placeholder="請輸入管理密碼" onkeydown="if(event.key==='Enter') verifyLogin()" />
+      </div>
+      <div class="modal-actions">
+        <button class="btn" onclick="closeModal('loginModal')">取消</button>
+        <button class="btn btn-primary" onclick="verifyLogin()">解鎖管理</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 新增 / 編輯內容視窗 -->
+  <div id="editorModal" class="modal-backdrop">
+    <div class="modal">
+      <h3 id="editorTitle">新增作品 / 筆記</h3>
+      <input type="hidden" id="editId" />
+      <div class="form-group">
+        <label for="itemType">內容類別</label>
+        <select id="itemType">
+          <option value="論文">📄 學術論文</option>
+          <option value="作品">🔬 研究作品</option>
+          <option value="影片">🎬 影音創作</option>
+          <option value="網頁">🌐 網頁專案</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="itemYear">發表年份</label>
+        <input type="text" id="itemYear" placeholder="例如：2026" />
+      </div>
+      <div class="form-group">
+        <label for="itemTitle">標題 / 專案名稱</label>
+        <input type="text" id="itemTitle" placeholder="請輸入論文、作品、影片或網頁名稱" />
+      </div>
+      <div class="form-group">
+        <label for="itemDesc">摘要與說明</label>
+        <textarea id="itemDesc" placeholder="簡述研究重點、作品內容、影片主題或網頁特色..."></textarea>
+      </div>
+      <div class="form-group">
+        <label for="itemLink">連結網址（Google 雲端硬碟 / YouTube / Canva / 網頁專案網址）</label>
+        <input type="url" id="itemLink" placeholder="https://..." />
+      </div>
+      <div class="modal-actions">
+        <button class="btn" onclick="closeModal('editorModal')">取消</button>
+        <button class="btn btn-primary" id="saveBtn" onclick="saveItem()">儲存並同步</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbw51XRs9H1QaaALked62HyxqfvL2yypj8Zibw9EPcxnCWmpQPVvpH_sw4YKaVWmfoTuIw/exec";
+
+    let allItems = [];
+    let currentFilter = "all";
+    let adminPassword = sessionStorage.getItem("portfolio_admin_pwd") || "";
+
+    document.getElementById("currentYear").textContent = new Date().getFullYear();
+
+    window.addEventListener("DOMContentLoaded", () => {
+      updateAdminUI();
+      loadData();
+    });
+
+    async function loadData() {
+      const container = document.getElementById("contentList");
+      container.innerHTML = `<div class="status-box">正在從雲端資料庫同步資料...</div>`;
+      try {
+        const res = await fetch(API_URL);
+        const data = await res.json();
+        allItems = Array.isArray(data) ? data.reverse() : [];
+        renderItems();
+      } catch (err) {
+        container.innerHTML = `<div class="status-box">讀取失敗，請確認網路連線或稍後再試。</div>`;
+      }
+    }
+
+    function getTypeMeta(type) {
+      switch (type) {
+        case "論文":
+          return { badge: "badge-paper", label: "📄 學術論文", actionText: "閱讀論文 / 文件 ↗" };
+        case "影片":
+          return { badge: "badge-video", label: "🎬 影音創作", actionText: "觀看影片 ↗" };
+        case "網頁":
+          return { badge: "badge-web", label: "🌐 網頁專案", actionText: "開啟網頁專案 ↗" };
+        default:
+          return { badge: "badge-project", label: "🔬 研究作品", actionText: "查看作品詳情 ↗" };
+      }
+    }
+
+    function renderItems() {
+      const container = document.getElementById("contentList");
+      const keyword = (document.getElementById("searchInput").value || "").trim().toLowerCase();
+
+      const filtered = allItems.filter(item => {
+        const matchType = currentFilter === "all" || item.type === currentFilter;
+        const matchKeyword = !keyword ||
+          (item.title && item.title.toLowerCase().includes(keyword)) ||
+          (item.desc && item.desc.toLowerCase().includes(keyword)) ||
+          (item.year && String(item.year).toLowerCase().includes(keyword));
+        return matchType && matchKeyword;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="status-box">目前找不到符合條件的內容。${adminPassword ? "點擊上方「＋ 新增作品 / 筆記」立即新增！" : ""}</div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(item => {
+        const meta = getTypeMeta(item.type);
+        const safeTitle = escapeHtml(item.title || "未命名項目");
+        const safeDesc = escapeHtml(item.desc || "");
+        const safeYear = escapeHtml(String(item.year || ""));
+        const safeLink = item.link ? escapeHtml(item.link) : "";
+
+        return `
+          <article class="card">
+            <div class="card-top">
+              <span class="badge ${meta.badge}">${meta.label}</span>
+              <span class="year">${safeYear}</span>
             </div>
-        </div>
-
-        <div class="paper-item">
-            <span class="paper-year">2025</span>
-            <div class="paper-title">互動式終端機模擬環境於資訊安全教學之應用</div>
-            <div class="paper-desc">摘要：設計一套純瀏覽器端執行的指令列模擬器，協助初學者安全地演練網路檢測與系統操作邏輯。</div>
-            <div class="links">
-                <a href="#" onclick="alert('請在此替換為你的論文 PDF 連結')">閱讀全文 (PDF)</a>
+            <h3>${safeTitle}</h3>
+            ${safeDesc ? `<p>${safeDesc}</p>` : ""}
+            <div class="card-footer">
+              <div>
+                ${safeLink
+                  ? `<a class="read-link" href="${safeLink}" target="_blank" rel="noopener noreferrer">${meta.actionText}</a>`
+                  : `<span style="font-size:0.85rem;color:#94a3b8;">無外部連結</span>`
+                }
+              </div>
+              ${adminPassword ? `
+                <div class="admin-actions">
+                  <button class="btn btn-sm" onclick="openEditorModal('${item.id}')">編輯</button>
+                  <button class="btn btn-danger btn-sm" onclick="deleteItem('${item.id}')">刪除</button>
+                </div>
+              ` : ""}
             </div>
-        </div>
-    </section>
+          </article>
+        `;
+      }).join("");
+    }
 
-    <!-- 作品區 -->
-    <section id="projects" class="section">
-        <h2>開發作品集 (Projects)</h2>
-        <div class="grid">
-            <div class="project-card">
-                <div>
-                    <span class="tag">HTML/JS</span><span class="tag">資安模擬</span>
-                    <h3>SYS_BREACH 終端機模擬器</h3>
-                    <p>純前端打造的擬真駭客指令終端機，支援系統掃描、封包追蹤與互動指令操作。</p>
-                </div>
-                <div class="links">
-                    <a href="#" target="_blank">線上預覽</a>
-                    <a href="https://github.com/u115639-debug" target="_blank">原始碼</a>
-                </div>
-            </div>
+    function setFilter(type, btn) {
+      currentFilter = type;
+      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+      btn.classList.add("active");
+      renderItems();
+    }
 
-            <div class="project-card">
-                <div>
-                    <span class="tag">Web App</span><span class="tag">API 串接</span>
-                    <h3>即時氣象與新聞資訊看板</h3>
-                    <p>整合即時天氣數據與每日焦點新聞的響應式網頁應用，支援行動裝置瀏覽。</p>
-                </div>
-                <div class="links">
-                    <a href="#" target="_blank">線上預覽</a>
-                    <a href="https://github.com/u115639-debug" target="_blank">原始碼</a>
-                </div>
-            </div>
-        </div>
-    </section>
+    function openLoginModal() {
+      document.getElementById("adminPwdInput").value = "";
+      document.getElementById("loginModal").classList.add("open");
+      setTimeout(() => document.getElementById("adminPwdInput").focus(), 50);
+    }
 
-    <!-- 聯絡區 -->
-    <section id="contact">
-        <h2>聯絡方式</h2>
-        <p style="color: var(--muted); margin-top: 0.5rem;">歡迎學術交流或專案合作聯繫：<strong>your.email@example.com</strong></p>
-    </section>
-</main>
+    function verifyLogin() {
+      const pwd = document.getElementById("adminPwdInput").value.trim();
+      if (!pwd) {
+        alert("請輸入管理密碼！");
+        return;
+      }
+      adminPassword = pwd;
+      sessionStorage.setItem("portfolio_admin_pwd", pwd);
+      closeModal("loginModal");
+      updateAdminUI();
+      renderItems();
+    }
 
-<footer>
-    © 2026 Personal Research & Portfolio. Hosted on Render.
-</footer>
+    function logoutAdmin() {
+      adminPassword = "";
+      sessionStorage.removeItem("portfolio_admin_pwd");
+      updateAdminUI();
+      renderItems();
+    }
 
+    function updateAdminUI() {
+      const banner = document.getElementById("adminBanner");
+      const headerControls = document.getElementById("headerControls");
+
+      if (adminPassword) {
+        banner.classList.add("show");
+        headerControls.innerHTML = `<button class="btn btn-primary btn-sm" onclick="openEditorModal()">＋ 新增內容</button>`;
+      } else {
+        banner.classList.remove("show");
+        headerControls.innerHTML = `<button class="btn" onclick="openLoginModal()">🔒 管理內容</button>`;
+      }
+    }
+
+    function openEditorModal(id = "") {
+      document.getElementById("editId").value = id;
+      if (id) {
+        const target = allItems.find(i => String(i.id) === String(id));
+        if (!target) return;
+        document.getElementById("editorTitle").textContent = "編輯內容";
+        document.getElementById("itemType").value = target.type || "論文";
+        document.getElementById("itemYear").value = target.year || "";
+        document.getElementById("itemTitle").value = target.title || "";
+        document.getElementById("itemDesc").value = target.desc || "";
+        document.getElementById("itemLink").value = target.link || "";
+      } else {
+        document.getElementById("editorTitle").textContent = "新增作品 / 筆記";
+        document.getElementById("itemType").value = "論文";
+        document.getElementById("itemYear").value = new Date().getFullYear();
+        document.getElementById("itemTitle").value = "";
+        document.getElementById("itemDesc").value = "";
+        document.getElementById("itemLink").value = "";
+      }
+      document.getElementById("editorModal").classList.add("open");
+    }
+
+    async function saveItem() {
+      const id = document.getElementById("editId").value;
+      const type = document.getElementById("itemType").value;
+      const year = document.getElementById("itemYear").value.trim();
+      const title = document.getElementById("itemTitle").value.trim();
+      const desc = document.getElementById("itemDesc").value.trim();
+      const link = document.getElementById("itemLink").value.trim();
+
+      if (!title) {
+        alert("請輸入標題！");
+        return;
+      }
+
+      const btn = document.getElementById("saveBtn");
+      btn.disabled = true;
+      btn.textContent = "同步中...";
+
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            password: adminPassword,
+            action: id ? "update" : "add",
+            id,
+            type,
+            year,
+            title,
+            desc,
+            link
+          })
+        });
+        const result = await res.json();
+        if (result.status === "error") {
+          alert("密碼錯誤，請重新登入！");
+          logoutAdmin();
+          closeModal("editorModal");
+          return;
+        }
+        closeModal("editorModal");
+        await loadData();
+      } catch (err) {
+        alert("同步失敗，請稍後再試。");
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "儲存並同步";
+      }
+    }
+
+    async function deleteItem(id) {
+      if (!confirm("確定要從雲端資料庫刪除這筆資料嗎？刪除後無法復原。")) return;
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            password: adminPassword,
+            action: "delete",
+            id
+          })
+        });
+        const result = await res.json();
+        if (result.status === "error") {
+          alert("密碼錯誤，請重新登入！");
+          logoutAdmin();
+          return;
+        }
+        await loadData();
+      } catch (err) {
+        alert("刪除失敗，請稍後再試。");
+      }
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove("open");
+    }
+
+    function escapeHtml(str) {
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+  </script>
 </body>
 </html>
