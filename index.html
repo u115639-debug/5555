@@ -75,12 +75,13 @@
       transition: all 0.15s ease;
     }
     .btn:hover { background: #f1f5f9; }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
     .btn-primary {
       background: var(--primary);
       color: #ffffff;
       border-color: var(--primary);
     }
-    .btn-primary:hover {
+    .btn-primary:hover:not(:disabled) {
       background: var(--primary-hover);
       border-color: var(--primary-hover);
     }
@@ -145,18 +146,31 @@
       align-items: center;
       gap: 0.35rem;
       font-size: 0.84rem;
+      font-family: inherit;
       color: #334155;
       background: #f1f5f9;
       border: 1px solid var(--border);
-      padding: 0.35rem 0.8rem;
+      padding: 0.38rem 0.85rem;
       border-radius: 999px;
       text-decoration: none;
+      cursor: pointer;
       transition: all 0.15s ease;
     }
 
     .contact-chip:hover {
       background: #e2e8f0;
       color: var(--text);
+    }
+
+    .contact-chip.yt-chip {
+      background: #fef2f2;
+      border-color: #fecaca;
+      color: #b91c1c;
+    }
+
+    .contact-chip.yt-chip:hover {
+      background: #fee2e2;
+      color: #991b1b;
     }
 
     /* 管理員模式橫幅 */
@@ -410,10 +424,7 @@
         <button id="editProfileBtn" class="btn btn-sm" style="display:none;" onclick="openProfileModal()">✏️ 編輯個人簡介</button>
       </div>
       <p id="profileBioDisplay">歡迎來到我的思維與研究筆記！這裡收錄了我的學術論文、研究作品、影音創作與網頁開發專案，記錄持續探索與思考的軌跡。</p>
-      <div class="contact-links" id="profileLinksDisplay">
-        <a class="contact-chip" href="mailto:yourname@example.com">✉️ yourname@example.com</a>
-        <a class="contact-chip" href="https://www.youtube.com" target="_blank" rel="noopener noreferrer">🔗 影音頻道 / 個人主頁 ↗</a>
-      </div>
+      <div class="contact-links" id="profileLinksDisplay"></div>
     </section>
 
     <!-- 管理員模式提示列 -->
@@ -455,15 +466,18 @@
     <div class="modal">
       <h3>🔒 輸入管理員密碼</h3>
       <p style="font-size:0.88rem; color:var(--muted); margin-bottom:1rem;">
-        請輸入您在 Google Apps Script 後台設定的管理密碼以解鎖編輯功能。
+        請輸入您在 Google Apps Script 後台設定的管理密碼，系統將即時核對身份。
       </p>
       <div class="form-group">
         <label for="adminPwdInput">管理密碼</label>
         <input type="password" id="adminPwdInput" placeholder="請輸入管理密碼" onkeydown="if(event.key==='Enter') verifyLogin()" />
       </div>
+      <p id="loginErrorMsg" style="display:none; color:var(--danger); font-size:0.85rem; margin-top:-0.4rem; margin-bottom:0.8rem;">
+        ❌ 密碼錯誤，請重新輸入！
+      </p>
       <div class="modal-actions">
         <button class="btn" onclick="closeModal('loginModal')">取消</button>
-        <button class="btn btn-primary" onclick="verifyLogin()">解鎖管理</button>
+        <button class="btn btn-primary" id="loginSubmitBtn" onclick="verifyLogin()">解鎖管理</button>
       </div>
     </div>
   </div>
@@ -481,16 +495,16 @@
         <textarea id="profBioInput" placeholder="輸入您的研究方向、專長或網站簡介..."></textarea>
       </div>
       <div class="form-group">
-        <label for="profEmailInput">聯絡信箱（留空則不顯示）</label>
+        <label for="profEmailInput">聯絡信箱（訪客點擊可直接複製，留空則不顯示）</label>
         <input type="email" id="profEmailInput" placeholder="yourname@example.com" />
       </div>
       <div class="form-group">
-        <label for="profLinkLabelInput">外部連結按鈕名稱（例如：YouTube 頻道 / 個人主頁）</label>
-        <input type="text" id="profLinkLabelInput" placeholder="影音頻道 / 個人主頁" />
+        <label for="profYtLabelInput">YouTube 頻道按鈕名稱</label>
+        <input type="text" id="profYtLabelInput" placeholder="YouTube 頻道" />
       </div>
       <div class="form-group">
-        <label for="profLinkUrlInput">外部連結網址（留空則不顯示）</label>
-        <input type="url" id="profLinkUrlInput" placeholder="https://..." />
+        <label for="profYtUrlInput">YouTube 頻道網址（留空則不顯示）</label>
+        <input type="url" id="profYtUrlInput" placeholder="https://www.youtube.com/@yourchannel" />
       </div>
       <div class="modal-actions">
         <button class="btn" onclick="closeModal('profileModal')">取消</button>
@@ -546,8 +560,8 @@
       title: "關於我 / About Me",
       bio: "歡迎來到我的思維與研究筆記！這裡收錄了我的學術論文、研究作品、影音創作與網頁開發專案，記錄持續探索與思考的軌跡。",
       email: "yourname@example.com",
-      linkLabel: "影音頻道 / 個人主頁",
-      linkUrl: "https://www.youtube.com"
+      ytLabel: "YouTube 頻道",
+      ytUrl: "https://www.youtube.com"
     };
 
     let currentFilter = "all";
@@ -569,7 +583,6 @@
         const data = await res.json();
         const rawList = Array.isArray(data) ? data : [];
 
-        // 分離個人簡介設定與一般作品資料
         const profRow = rawList.find(item => item.type === PROFILE_MARKER);
         if (profRow) {
           profileRecordId = profRow.id;
@@ -579,13 +592,13 @@
               title: profRow.title || profileData.title,
               bio: parsed.bio !== undefined ? parsed.bio : profileData.bio,
               email: parsed.email !== undefined ? parsed.email : "",
-              linkLabel: parsed.linkLabel || "外部連結",
-              linkUrl: profRow.link || ""
+              ytLabel: parsed.ytLabel || parsed.linkLabel || "YouTube 頻道",
+              ytUrl: profRow.link || ""
             };
           } catch (e) {
             profileData.title = profRow.title || profileData.title;
             profileData.bio = profRow.desc || profileData.bio;
-            profileData.linkUrl = profRow.link || "";
+            profileData.ytUrl = profRow.link || "";
           }
         }
 
@@ -603,24 +616,40 @@
 
       const linksEl = document.getElementById("profileLinksDisplay");
       let chipsHtml = "";
+
       if (profileData.email) {
         const safeEmail = escapeHtml(profileData.email);
-        chipsHtml += `<a class="contact-chip" href="mailto:${safeEmail}">✉️ ${safeEmail}</a>`;
+        chipsHtml += `<button type="button" class="contact-chip" onclick="copyEmail(this)" title="點擊複製信箱">✉️ ${safeEmail}</button>`;
       }
-      if (profileData.linkUrl) {
-        const safeUrl = escapeHtml(profileData.linkUrl);
-        const safeLabel = escapeHtml(profileData.linkLabel || "外部連結");
-        chipsHtml += `<a class="contact-chip" href="${safeUrl}" target="_blank" rel="noopener noreferrer">🔗 ${safeLabel} ↗</a>`;
+
+      if (profileData.ytUrl) {
+        const safeUrl = escapeHtml(profileData.ytUrl);
+        const safeLabel = escapeHtml(profileData.ytLabel || "YouTube 頻道");
+        chipsHtml += `<a class="contact-chip yt-chip" href="${safeUrl}" target="_blank" rel="noopener noreferrer">▶️ ${safeLabel} ↗</a>`;
       }
+
       linksEl.innerHTML = chipsHtml;
+    }
+
+    function copyEmail(btnEl) {
+      if (!profileData.email) return;
+      navigator.clipboard.writeText(profileData.email).then(() => {
+        const originalText = btnEl.textContent;
+        btnEl.textContent = "✅ 已複製信箱：" + profileData.email;
+        setTimeout(() => {
+          btnEl.textContent = originalText;
+        }, 2000);
+      }).catch(() => {
+        alert("聯絡信箱：" + profileData.email);
+      });
     }
 
     function openProfileModal() {
       document.getElementById("profTitleInput").value = profileData.title || "";
       document.getElementById("profBioInput").value = profileData.bio || "";
       document.getElementById("profEmailInput").value = profileData.email || "";
-      document.getElementById("profLinkLabelInput").value = profileData.linkLabel || "";
-      document.getElementById("profLinkUrlInput").value = profileData.linkUrl || "";
+      document.getElementById("profYtLabelInput").value = profileData.ytLabel || "YouTube 頻道";
+      document.getElementById("profYtUrlInput").value = profileData.ytUrl || "";
       document.getElementById("profileModal").classList.add("open");
     }
 
@@ -628,14 +657,14 @@
       const title = document.getElementById("profTitleInput").value.trim() || "關於我 / About Me";
       const bio = document.getElementById("profBioInput").value.trim();
       const email = document.getElementById("profEmailInput").value.trim();
-      const linkLabel = document.getElementById("profLinkLabelInput").value.trim() || "外部連結";
-      const linkUrl = document.getElementById("profLinkUrlInput").value.trim();
+      const ytLabel = document.getElementById("profYtLabelInput").value.trim() || "YouTube 頻道";
+      const ytUrl = document.getElementById("profYtUrlInput").value.trim();
 
       const btn = document.getElementById("saveProfileBtn");
       btn.disabled = true;
       btn.textContent = "同步中...";
 
-      const packedDesc = JSON.stringify({ bio, email, linkLabel });
+      const packedDesc = JSON.stringify({ bio, email, ytLabel });
 
       try {
         const res = await fetch(API_URL, {
@@ -648,7 +677,7 @@
             year: "PROFILE",
             title: title,
             desc: packedDesc,
-            link: linkUrl
+            link: ytUrl
           })
         });
         const result = await res.json();
@@ -742,21 +771,58 @@
 
     function openLoginModal() {
       document.getElementById("adminPwdInput").value = "";
+      document.getElementById("loginErrorMsg").style.display = "none";
       document.getElementById("loginModal").classList.add("open");
       setTimeout(() => document.getElementById("adminPwdInput").focus(), 50);
     }
 
-    function verifyLogin() {
-      const pwd = document.getElementById("adminPwdInput").value.trim();
+    async function verifyLogin() {
+      const pwdInput = document.getElementById("adminPwdInput");
+      const errorMsg = document.getElementById("loginErrorMsg");
+      const submitBtn = document.getElementById("loginSubmitBtn");
+      const pwd = pwdInput.value.trim();
+
       if (!pwd) {
-        alert("請輸入管理密碼！");
+        errorMsg.textContent = "❌ 請輸入管理密碼！";
+        errorMsg.style.display = "block";
         return;
       }
-      adminPassword = pwd;
-      sessionStorage.setItem("portfolio_admin_pwd", pwd);
-      closeModal("loginModal");
-      updateAdminUI();
-      renderItems();
+
+      errorMsg.style.display = "none";
+      submitBtn.disabled = true;
+      submitBtn.textContent = "驗證中...";
+
+      try {
+        // 向後端發送無副作用的驗證請求（刪除一個不存在的測試 ID，藉此觸發後端密碼比對）
+        const res = await fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            password: pwd,
+            action: "delete",
+            id: "__VERIFY_PWD_ONLY__"
+          })
+        });
+        const result = await res.json();
+
+        if (result.status === "error") {
+          errorMsg.textContent = "❌ 密碼錯誤，請重新輸入！";
+          errorMsg.style.display = "block";
+          pwdInput.select();
+          return;
+        }
+
+        adminPassword = pwd;
+        sessionStorage.setItem("portfolio_admin_pwd", pwd);
+        closeModal("loginModal");
+        updateAdminUI();
+        renderItems();
+      } catch (err) {
+        errorMsg.textContent = "⚠️ 網路連線異常，無法驗證密碼，請稍後再試。";
+        errorMsg.style.display = "block";
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "解鎖管理";
+      }
     }
 
     function logoutAdmin() {
