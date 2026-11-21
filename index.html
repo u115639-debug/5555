@@ -29,7 +29,6 @@
       flex-direction: column;
     }
 
-    /* 頂部導覽列 */
     header {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
@@ -60,7 +59,6 @@
       margin-top: 0.1rem;
     }
 
-    /* 按鈕樣式 */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -97,7 +95,6 @@
     }
     .btn-sm { padding: 0.35rem 0.7rem; font-size: 0.82rem; }
 
-    /* 主內容區塊 */
     main {
       max-width: 1024px;
       width: 100%;
@@ -106,9 +103,7 @@
       flex: 1;
     }
 
-    /* ============================================================
-       個人簡介區塊（直接寫在網頁中，載入秒開，隨時可在此修改文字）
-       ============================================================ */
+    /* 個人簡介區塊 */
     .profile-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -117,10 +112,17 @@
       margin-bottom: 1.75rem;
     }
 
+    .profile-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 0.45rem;
+    }
+
     .profile-card h2 {
       font-size: 1.2rem;
       font-weight: 700;
-      margin-bottom: 0.45rem;
       color: var(--text);
     }
 
@@ -129,6 +131,7 @@
       font-size: 0.95rem;
       margin-bottom: 1rem;
       max-width: 78ch;
+      white-space: pre-line;
     }
 
     .contact-links {
@@ -310,7 +313,6 @@
       gap: 0.45rem;
     }
 
-    /* 狀態提示 */
     .status-box {
       text-align: center;
       padding: 3.5rem 1rem;
@@ -320,7 +322,6 @@
       border-radius: 12px;
     }
 
-    /* 頁尾 */
     footer {
       text-align: center;
       padding: 2rem 1rem;
@@ -402,11 +403,14 @@
   </header>
 
   <main>
-    <!-- 個人簡介區塊（日後欲修改個人介紹、信箱或頻道連結，直接改這裡的文字即可） -->
+    <!-- 個人簡介區塊（支援後台直接線上編輯） -->
     <section class="profile-card">
-      <h2>關於我 / About Me</h2>
-      <p>歡迎來到我的思維與研究筆記！這裡收錄了我的學術論文、研究作品、影音創作與網頁開發專案，記錄持續探索與思考的軌跡。</p>
-      <div class="contact-links">
+      <div class="profile-header">
+        <h2 id="profileTitleDisplay">關於我 / About Me</h2>
+        <button id="editProfileBtn" class="btn btn-sm" style="display:none;" onclick="openProfileModal()">✏️ 編輯個人簡介</button>
+      </div>
+      <p id="profileBioDisplay">歡迎來到我的思維與研究筆記！這裡收錄了我的學術論文、研究作品、影音創作與網頁開發專案，記錄持續探索與思考的軌跡。</p>
+      <div class="contact-links" id="profileLinksDisplay">
         <a class="contact-chip" href="mailto:yourname@example.com">✉️ yourname@example.com</a>
         <a class="contact-chip" href="https://www.youtube.com" target="_blank" rel="noopener noreferrer">🔗 影音頻道 / 個人主頁 ↗</a>
       </div>
@@ -414,7 +418,7 @@
 
     <!-- 管理員模式提示列 -->
     <div id="adminBanner" class="admin-banner">
-      <span>🔓 <strong>管理員模式已解鎖</strong>：可直接新增、編輯或刪除各類作品與筆記（自動同步雲端）。</span>
+      <span>🔓 <strong>管理員模式已解鎖</strong>：可編輯個人簡介，或新增、修改與刪除作品（自動同步雲端）。</span>
       <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
         <button class="btn btn-primary btn-sm" onclick="openEditorModal()">＋ 新增作品 / 筆記</button>
         <button class="btn btn-sm" onclick="logoutAdmin()">登出管理</button>
@@ -464,7 +468,38 @@
     </div>
   </div>
 
-  <!-- 新增 / 編輯內容視窗 -->
+  <!-- 編輯個人簡介視窗 -->
+  <div id="profileModal" class="modal-backdrop">
+    <div class="modal">
+      <h3>✏️ 編輯個人資訊</h3>
+      <div class="form-group">
+        <label for="profTitleInput">顯示名稱 / 區塊標題</label>
+        <input type="text" id="profTitleInput" placeholder="例如：王小明 | 研究者與創作者" />
+      </div>
+      <div class="form-group">
+        <label for="profBioInput">自我介紹</label>
+        <textarea id="profBioInput" placeholder="輸入您的研究方向、專長或網站簡介..."></textarea>
+      </div>
+      <div class="form-group">
+        <label for="profEmailInput">聯絡信箱（留空則不顯示）</label>
+        <input type="email" id="profEmailInput" placeholder="yourname@example.com" />
+      </div>
+      <div class="form-group">
+        <label for="profLinkLabelInput">外部連結按鈕名稱（例如：YouTube 頻道 / 個人主頁）</label>
+        <input type="text" id="profLinkLabelInput" placeholder="影音頻道 / 個人主頁" />
+      </div>
+      <div class="form-group">
+        <label for="profLinkUrlInput">外部連結網址（留空則不顯示）</label>
+        <input type="url" id="profLinkUrlInput" placeholder="https://..." />
+      </div>
+      <div class="modal-actions">
+        <button class="btn" onclick="closeModal('profileModal')">取消</button>
+        <button class="btn btn-primary" id="saveProfileBtn" onclick="saveProfile()">儲存並同步</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 新增 / 編輯作品視窗 -->
   <div id="editorModal" class="modal-backdrop">
     <div class="modal">
       <h3 id="editorTitle">新增作品 / 筆記</h3>
@@ -503,8 +538,18 @@
 
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbw51XRs9H1QaaALked62HyxqfvL2yypj8Zibw9EPcxnCWmpQPVvpH_sw4YKaVWmfoTuIw/exec";
+    const PROFILE_MARKER = "__PROFILE_CONFIG__";
 
     let allItems = [];
+    let profileRecordId = "";
+    let profileData = {
+      title: "關於我 / About Me",
+      bio: "歡迎來到我的思維與研究筆記！這裡收錄了我的學術論文、研究作品、影音創作與網頁開發專案，記錄持續探索與思考的軌跡。",
+      email: "yourname@example.com",
+      linkLabel: "影音頻道 / 個人主頁",
+      linkUrl: "https://www.youtube.com"
+    };
+
     let currentFilter = "all";
     let adminPassword = sessionStorage.getItem("portfolio_admin_pwd") || "";
 
@@ -512,6 +557,7 @@
 
     window.addEventListener("DOMContentLoaded", () => {
       updateAdminUI();
+      renderProfile();
       loadData();
     });
 
@@ -521,10 +567,104 @@
       try {
         const res = await fetch(API_URL);
         const data = await res.json();
-        allItems = Array.isArray(data) ? data.reverse() : [];
+        const rawList = Array.isArray(data) ? data : [];
+
+        // 分離個人簡介設定與一般作品資料
+        const profRow = rawList.find(item => item.type === PROFILE_MARKER);
+        if (profRow) {
+          profileRecordId = profRow.id;
+          try {
+            const parsed = JSON.parse(profRow.desc || "{}");
+            profileData = {
+              title: profRow.title || profileData.title,
+              bio: parsed.bio !== undefined ? parsed.bio : profileData.bio,
+              email: parsed.email !== undefined ? parsed.email : "",
+              linkLabel: parsed.linkLabel || "外部連結",
+              linkUrl: profRow.link || ""
+            };
+          } catch (e) {
+            profileData.title = profRow.title || profileData.title;
+            profileData.bio = profRow.desc || profileData.bio;
+            profileData.linkUrl = profRow.link || "";
+          }
+        }
+
+        allItems = rawList.filter(item => item.type !== PROFILE_MARKER).reverse();
+        renderProfile();
         renderItems();
       } catch (err) {
         container.innerHTML = `<div class="status-box">讀取失敗，請確認網路連線或稍後再試。</div>`;
+      }
+    }
+
+    function renderProfile() {
+      document.getElementById("profileTitleDisplay").textContent = profileData.title;
+      document.getElementById("profileBioDisplay").textContent = profileData.bio;
+
+      const linksEl = document.getElementById("profileLinksDisplay");
+      let chipsHtml = "";
+      if (profileData.email) {
+        const safeEmail = escapeHtml(profileData.email);
+        chipsHtml += `<a class="contact-chip" href="mailto:${safeEmail}">✉️ ${safeEmail}</a>`;
+      }
+      if (profileData.linkUrl) {
+        const safeUrl = escapeHtml(profileData.linkUrl);
+        const safeLabel = escapeHtml(profileData.linkLabel || "外部連結");
+        chipsHtml += `<a class="contact-chip" href="${safeUrl}" target="_blank" rel="noopener noreferrer">🔗 ${safeLabel} ↗</a>`;
+      }
+      linksEl.innerHTML = chipsHtml;
+    }
+
+    function openProfileModal() {
+      document.getElementById("profTitleInput").value = profileData.title || "";
+      document.getElementById("profBioInput").value = profileData.bio || "";
+      document.getElementById("profEmailInput").value = profileData.email || "";
+      document.getElementById("profLinkLabelInput").value = profileData.linkLabel || "";
+      document.getElementById("profLinkUrlInput").value = profileData.linkUrl || "";
+      document.getElementById("profileModal").classList.add("open");
+    }
+
+    async function saveProfile() {
+      const title = document.getElementById("profTitleInput").value.trim() || "關於我 / About Me";
+      const bio = document.getElementById("profBioInput").value.trim();
+      const email = document.getElementById("profEmailInput").value.trim();
+      const linkLabel = document.getElementById("profLinkLabelInput").value.trim() || "外部連結";
+      const linkUrl = document.getElementById("profLinkUrlInput").value.trim();
+
+      const btn = document.getElementById("saveProfileBtn");
+      btn.disabled = true;
+      btn.textContent = "同步中...";
+
+      const packedDesc = JSON.stringify({ bio, email, linkLabel });
+
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            password: adminPassword,
+            action: profileRecordId ? "update" : "add",
+            id: profileRecordId,
+            type: PROFILE_MARKER,
+            year: "PROFILE",
+            title: title,
+            desc: packedDesc,
+            link: linkUrl
+          })
+        });
+        const result = await res.json();
+        if (result.status === "error") {
+          alert("密碼錯誤，請重新登入！");
+          logoutAdmin();
+          closeModal("profileModal");
+          return;
+        }
+        closeModal("profileModal");
+        await loadData();
+      } catch (err) {
+        alert("同步失敗，請稍後再試。");
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "儲存並同步";
       }
     }
 
@@ -629,12 +769,15 @@
     function updateAdminUI() {
       const banner = document.getElementById("adminBanner");
       const headerControls = document.getElementById("headerControls");
+      const editProfileBtn = document.getElementById("editProfileBtn");
 
       if (adminPassword) {
         banner.classList.add("show");
+        editProfileBtn.style.display = "inline-flex";
         headerControls.innerHTML = `<button class="btn btn-primary btn-sm" onclick="openEditorModal()">＋ 新增內容</button>`;
       } else {
         banner.classList.remove("show");
+        editProfileBtn.style.display = "none";
         headerControls.innerHTML = `<button class="btn" onclick="openLoginModal()">🔒 管理內容</button>`;
       }
     }
